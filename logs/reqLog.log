@@ -1,0 +1,7 @@
+20240523	10:26:17	b3a76c4c-a548-41ae-bff3-245d7bf5620c	GET	/api-docs/	unknown
+20240523	10:26:17	cb9cc183-9645-4f2d-9007-594dbc45de8a	GET	/api-docs/swagger-ui.css	unknown
+20240523	10:26:17	d75c6730-e69b-4908-8589-96b9df301749	GET	/api-docs/swagger-ui-bundle.js	unknown
+20240523	10:26:17	b70d828f-381a-4336-9d08-55a92da8d588	GET	/api-docs/swagger-ui-standalone-preset.js	unknown
+20240523	10:26:17	f6383fe6-f876-4655-8d73-d1815a1495fd	GET	/api-docs/swagger-ui-init.js	unknown
+20240523	10:26:18	9ee85cee-c4e9-42e1-bbe3-b2ba3b5cd34b	GET	/api-docs/favicon-32x32.png	unknown
+20240523	10:26:42	c01ab0e2-d220-47ec-9ff3-b2bd7e851377	POST	/api/auth/login	http://localhost:5000
