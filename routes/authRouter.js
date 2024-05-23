@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { register, login, getProfile } = require('../controllers/authController');
+const { register, login, getProfile, updateUser } = require('../controllers/authController');
 const { protect,adminProtect,managerProtect} = require('../middleware/auth');
 
 /**
@@ -16,6 +16,14 @@ const { protect,adminProtect,managerProtect} = require('../middleware/auth');
  *   post:
  *     summary: Register a new user
  *     tags: [Authentication]
+ *     parameters:
+ *       - in: query
+ *         name: role
+ *         schema:
+ *           type: string
+ *           enum: [admin, manager, employee]
+ *         description: Role of the user
+ *         required: true
  *     requestBody:
  *       required: true
  *       content:
@@ -25,21 +33,24 @@ const { protect,adminProtect,managerProtect} = require('../middleware/auth');
  *             properties:
  *               name:
  *                 type: string
+ *                 description: Name of the user
  *               userName:
  *                 type: string
+ *                 description: Username of the user
  *               email:
  *                 type: string
+ *                 description: Email of the user
  *               password:
  *                 type: string
+ *                 description: Password of the user
  *     responses:
- *       '200':
- *         description: Successfully registered
- *       '400':
+ *       201:
+ *         description: User registered successfully
+ *       400:
  *         description: Bad request, missing or invalid parameters
- *       '500':
+ *       500:
  *         description: Internal server error
  */
-
 router.post('/register', register);
 
 /**
@@ -88,5 +99,61 @@ router.post('/login', login);
  */
 
 router.get('/profile', protect, getProfile);
+
+/**
+ * @swagger
+ * /api/auth/users/{id}:
+ *   put:
+ *     summary: Update a user
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: User ID
+ *       - in: query
+ *         name: role
+ *         schema:
+ *           type: string
+ *           enum: [admin, manager, employee]
+ *         description: Role of the user
+ *         required: false
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Name of the user
+ *               userName:
+ *                 type: string
+ *                 description: Username of the user
+ *               password:
+ *                 type: string
+ *                 description: Password of the user
+ *               email:
+ *                 type: string
+ *                 description: Email of the user
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Bad request
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+router.put('/users/:id', protect,adminProtect,updateUser);
+
 
 module.exports = router;
