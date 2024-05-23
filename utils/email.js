@@ -1,8 +1,6 @@
-// utils/email.js
 const nodemailer = require('nodemailer');
 
-const sendReportEmail = async (email, reportData) => {
-    console.log(email);
+const sendReportEmail = async (email, reportData, reportType) => {
     let transporter = nodemailer.createTransport({
         service: 'Gmail',
         auth: {
@@ -11,10 +9,25 @@ const sendReportEmail = async (email, reportData) => {
         }
     });
 
-    const subject = 'Your Task Report';
-    const text = `Here is your task report:\n\nTotal Tasks: ${reportData.totalTasks}\nCompleted Tasks: ${reportData.completedTasks}\nPending Tasks: ${reportData.pendingTasks}\nFor Review Tasks: ${reportData.forReviewTasks}\nCompletion Rate: ${reportData.completionRate}%\nOverdue Tasks: ${reportData.overdueTasks}`;
+    let subject, text;
 
-    // send mail with defined transport object
+    if (reportType === 'inventory') {
+        subject = 'Your Inventory Report';
+        text = `Here is your inventory report:\n\n`;
+        reportData.forEach(item => {
+            text += `Item: ${item.name}, Quantity: ${item.quantity}\n`;
+        });
+    } else if (reportType === 'transactions') {
+        subject = 'Your Transactions Report';
+        text = `Here is your transactions report:\n\n`;
+        reportData.forEach(transaction => {
+            text += `Type: ${transaction.type}, Quantity: ${transaction.quantity}, Item ID: ${transaction.itemId}, User ID: ${transaction.userId}, Timestamp: ${transaction.timestamp}\n`;
+        });
+    } else {
+        subject = 'Your Report';
+        text = `Here is your report:\n\n${JSON.stringify(reportData, null, 2)}`;
+    }
+
     let info = await transporter.sendMail({
         from: '"Yonatan" <yonatanwork122@gmail.com>',
         to: email,

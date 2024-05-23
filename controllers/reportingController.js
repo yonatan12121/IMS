@@ -5,18 +5,15 @@ const StockMovement = require('../models/stock');
 // Get inventory levels report and send email
 exports.getInventoryLevelsReport = async (req, res) => {
     try {
-        console.log("hello");
-
         const inventoryItems = await InventoryItem.find();
         const report = inventoryItems.map(item => ({
             name: item.name,
             quantity: item.quantity,
         }));
-        console.log("hello");
 
         // Send email with the inventory levels report
         const email = req.user.email; // Assuming the user's email is stored in req.user.email
-        await sendReportEmail(email, report);
+        await sendReportEmail(email, report, 'inventory');
 
         res.status(200).json(report);
     } catch (error) {
@@ -32,7 +29,7 @@ exports.getTransactionsReport = async (req, res) => {
         
         // Send email with the transactions report
         const email = req.user.email; // Assuming the user's email is stored in req.user.email
-        await sendReportEmail(email, transactions);
+        await sendReportEmail(email, transactions, 'transactions');
 
         res.status(200).json(transactions);
     } catch (error) {
